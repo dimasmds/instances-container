@@ -1,9 +1,9 @@
-import Dependencies from './Dependencies';
+import ParameterOption from './ParameterOption';
 
 interface InstanceOption {
-  key: string
+  key?: string
   Class: object
-  dependencies?: Dependencies[]
+  parameter?: ParameterOption
 }
 
 export default InstanceOption;

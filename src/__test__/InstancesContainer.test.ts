@@ -12,6 +12,14 @@ class DummyClass {
   }
 }
 
+class DummyClassWithNormalParam {
+  private deps: OtherDummyClass;
+
+  constructor(deps) {
+    this.deps = deps;
+  }
+}
+
 describe('InstanceContainer', () => {
   afterEach(() => {
     InstancesContainer.Instances = {};
@@ -22,12 +30,15 @@ describe('InstanceContainer', () => {
       const instance: InstanceOption = {
         key: 'DummyClass',
         Class: DummyClass,
-        dependencies: [
-          {
-            name: 'deps',
-            concrete: {},
-          },
-        ],
+        parameter: {
+          injectType: 'destructuring',
+          dependencies: [
+            {
+              name: 'deps',
+              concrete: {},
+            },
+          ],
+        },
       };
 
       InstancesContainer.registerInstance(instance);
@@ -36,8 +47,10 @@ describe('InstanceContainer', () => {
         .toBeInstanceOf(Object);
       expect(InstancesContainer.Instances[instance.key].Class)
         .toEqual(instance.Class);
-      expect(InstancesContainer.Instances[instance.key].dependencies)
-        .toEqual(instance.dependencies);
+      expect(InstancesContainer.Instances[instance.key].parameter)
+        .toEqual(instance.parameter);
+      expect(InstancesContainer.Instances[instance.key].parameter.dependencies)
+        .toEqual(instance.parameter.dependencies);
     });
   });
 
@@ -47,27 +60,36 @@ describe('InstanceContainer', () => {
         {
           key: 'DummyClassOne',
           Class: DummyClass,
-          dependencies: [
-            {
-              name: 'deps',
-              concrete: {},
-            },
-          ],
+          parameter: {
+            injectType: 'destructuring',
+            dependencies: [
+              {
+                name: 'deps',
+                concrete: {},
+              },
+            ],
+          },
         },
         {
           key: 'OtherDummyClass',
           Class: OtherDummyClass,
-          dependencies: [],
+          parameter: {
+            injectType: 'destructuring',
+            dependencies: [],
+          },
         },
         {
           key: 'DummyClassTwo',
           Class: DummyClass,
-          dependencies: [
-            {
-              name: 'deps',
-              internal: 'OtherDummyClass',
-            },
-          ],
+          parameter: {
+            injectType: 'destructuring',
+            dependencies: [
+              {
+                name: 'deps',
+                internal: 'OtherDummyClass',
+              },
+            ],
+          },
         },
       ];
 
@@ -77,22 +99,22 @@ describe('InstanceContainer', () => {
         .toBeInstanceOf(Object);
       expect(InstancesContainer.Instances.DummyClassOne.Class)
         .toEqual(instancesToRegister[0].Class);
-      expect(InstancesContainer.Instances.DummyClassOne.dependencies)
-        .toEqual(instancesToRegister[0].dependencies);
+      expect(InstancesContainer.Instances.DummyClassOne.parameter)
+        .toEqual(instancesToRegister[0].parameter);
 
       expect(InstancesContainer.Instances.OtherDummyClass)
         .toBeInstanceOf(Object);
       expect(InstancesContainer.Instances.OtherDummyClass.Class)
         .toEqual(instancesToRegister[1].Class);
-      expect(InstancesContainer.Instances.OtherDummyClass.dependencies)
-        .toEqual(instancesToRegister[1].dependencies);
+      expect(InstancesContainer.Instances.OtherDummyClass.parameter)
+        .toEqual(instancesToRegister[1].parameter);
 
       expect(InstancesContainer.Instances.DummyClassTwo)
         .toBeInstanceOf(Object);
       expect(InstancesContainer.Instances.DummyClassTwo.Class)
         .toEqual(instancesToRegister[2].Class);
-      expect(InstancesContainer.Instances.DummyClassTwo.dependencies)
-        .toEqual(instancesToRegister[2].dependencies);
+      expect(InstancesContainer.Instances.DummyClassTwo.parameter)
+        .toEqual(instancesToRegister[2].parameter);
     });
   });
 
@@ -101,12 +123,15 @@ describe('InstanceContainer', () => {
       const instance: InstanceOption = {
         key: 'DummyClass',
         Class: DummyClass,
-        dependencies: [
-          {
-            name: 'deps',
-            concrete: {},
-          },
-        ],
+        parameter: {
+          injectType: 'destructuring',
+          dependencies: [
+            {
+              name: 'deps',
+              concrete: {},
+            },
+          ],
+        },
       };
 
       InstancesContainer.registerInstance(instance);
@@ -114,7 +139,30 @@ describe('InstanceContainer', () => {
       const dummyClass = InstancesContainer.getInstance('DummyClass');
 
       expect(dummyClass).toBeInstanceOf(instance.Class);
-      expect(dummyClass.deps).toEqual(instance.dependencies[0].concrete);
+      expect(dummyClass.deps).toEqual(instance.parameter.dependencies[0].concrete);
+    });
+
+    it('should return instance correctly when given injectType parameter', () => {
+      const instance: InstanceOption = {
+        key: 'DummyClassWithNormalParam',
+        Class: DummyClassWithNormalParam,
+        parameter: {
+          injectType: 'parameter',
+          dependencies: [
+            {
+              name: 'deps',
+              concrete: {},
+            },
+          ],
+        },
+      };
+
+      InstancesContainer.registerInstance(instance);
+
+      const dummyClass = InstancesContainer.getInstance('DummyClassWithNormalParam');
+
+      expect(dummyClass).toBeInstanceOf(instance.Class);
+      expect(dummyClass.deps).toEqual(instance.parameter.dependencies[0].concrete);
     });
 
     it('should throw error when getting not found instance', () => {
@@ -126,12 +174,15 @@ describe('InstanceContainer', () => {
       const instance: InstanceOption = {
         key: 'DummyClass',
         Class: DummyClass,
-        dependencies: [
-          {
-            name: 'deps',
-            concrete: {},
-          },
-        ],
+        parameter: {
+          injectType: 'destructuring',
+          dependencies: [
+            {
+              name: 'deps',
+              concrete: {},
+            },
+          ],
+        },
       };
 
       InstancesContainer.registerInstance(instance);
@@ -147,17 +198,23 @@ describe('InstanceContainer', () => {
         {
           key: 'OtherDummyClass',
           Class: OtherDummyClass,
-          dependencies: [],
+          parameter: {
+            injectType: 'destructuring',
+            dependencies: [],
+          },
         },
         {
           key: 'DummyClass',
           Class: DummyClass,
-          dependencies: [
-            {
-              name: 'deps',
-              internal: 'OtherDummyClass',
-            },
-          ],
+          parameter: {
+            injectType: 'destructuring',
+            dependencies: [
+              {
+                name: 'deps',
+                concrete: {},
+              },
+            ],
+          },
         },
       ];
 
@@ -173,11 +230,14 @@ describe('InstanceContainer', () => {
       const instance: InstanceOption = {
         key: 'DummyClass',
         Class: DummyClass,
-        dependencies: [
-          {
-            name: 'deps',
-          },
-        ],
+        parameter: {
+          injectType: 'destructuring',
+          dependencies: [
+            {
+              name: 'deps',
+            },
+          ],
+        },
       };
 
       InstancesContainer.registerInstance(instance);
@@ -190,13 +250,16 @@ describe('InstanceContainer', () => {
       const instance: InstanceOption = {
         key: 'DummyClass',
         Class: DummyClass,
-        dependencies: [
-          {
-            name: 'deps',
-            concrete: {},
-            internal: 'OtherClass',
-          },
-        ],
+        parameter: {
+          injectType: 'destructuring',
+          dependencies: [
+            {
+              name: 'deps',
+              concrete: {},
+              internal: 'dummy',
+            },
+          ],
+        },
       };
 
       InstancesContainer.registerInstance(instance);
@@ -211,12 +274,15 @@ describe('InstanceContainer', () => {
       const instance: InstanceOption = {
         key: 'DummyClass',
         Class: DummyClass,
-        dependencies: [
-          {
-            name: 'deps',
-            concrete: {},
-          },
-        ],
+        parameter: {
+          injectType: 'destructuring',
+          dependencies: [
+            {
+              name: 'deps',
+              concrete: {},
+            },
+          ],
+        },
       };
 
       InstancesContainer.registerInstance(instance);
@@ -237,22 +303,28 @@ describe('InstanceContainer', () => {
         {
           key: 'DummyClass',
           Class: DummyClass,
-          dependencies: [
-            {
-              name: 'deps',
-              concrete: {},
-            },
-          ],
+          parameter: {
+            injectType: 'destructuring',
+            dependencies: [
+              {
+                name: 'deps',
+                concrete: {},
+              },
+            ],
+          },
         },
         {
           key: 'DummyClass2',
           Class: DummyClass,
-          dependencies: [
-            {
-              name: 'deps',
-              concrete: {},
-            },
-          ],
+          parameter: {
+            injectType: 'destructuring',
+            dependencies: [
+              {
+                name: 'deps',
+                concrete: {},
+              },
+            ],
+          },
         },
       ];
 

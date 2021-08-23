@@ -1,5 +1,5 @@
 import InstanceOption from './definitions/InstanceOption';
-import Dependencies from './definitions/Dependencies';
+import ParameterOption from './definitions/ParameterOption';
 
 export class InstancesContainer {
   static Instances: any = {};
@@ -25,15 +25,43 @@ export class InstancesContainer {
       return Instance.INSTANCE;
     }
 
-    const dependencies = this.buildDependencies(Instance.dependencies);
-    Instance.INSTANCE = new Instance.Class(dependencies);
+    const parameters = this.buildParameters(Instance.parameter);
+    Instance.INSTANCE = Array.isArray(parameters)
+      ? new Instance.Class(...parameters)
+      : new Instance.Class(parameters);
     return Instance.INSTANCE;
   }
 
-  private static buildDependencies(dependencies: Dependencies[]): any {
-    const deps: any = {};
+  private static buildParameters(parameter: ParameterOption): any {
+    if (parameter.injectType === 'destructuring') {
+      const deps: any = {};
+      const { dependencies } = parameter;
 
-    dependencies.forEach((dependency) => {
+      // Build destructuring params
+      dependencies.forEach((dependency) => {
+        if (!dependency.internal && !dependency.concrete) {
+          throw new Error('please give concrete or internal type of dependencies');
+        }
+
+        if (dependency.internal && dependency.concrete) {
+          throw new Error('cannot give concrete and internal together');
+        }
+
+        if (dependency.concrete) {
+          deps[dependency.name] = dependency.concrete;
+          return;
+        }
+
+        deps[dependency.name] = this.getInstance(dependency.internal);
+      });
+      return deps;
+    }
+
+    // Build normal parameters
+    const deps = [];
+    const { dependencies } = parameter;
+
+    dependencies.forEach((dependency, index) => {
       if (!dependency.internal && !dependency.concrete) {
         throw new Error('please give concrete or internal type of dependencies');
       }
@@ -43,11 +71,11 @@ export class InstancesContainer {
       }
 
       if (dependency.concrete) {
-        deps[dependency.name] = dependency.concrete;
+        deps[index] = dependency.concrete;
         return;
       }
 
-      deps[dependency.name] = this.getInstance(dependency.internal);
+      deps[index] = this.getInstance(dependency.internal);
     });
 
     return deps;
