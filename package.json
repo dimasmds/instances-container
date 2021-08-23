@@ -1,7 +1,7 @@
 {
   "name": "instances-container",
   "version": "1.0.0",
-  "description": "",
+  "description": "Simple instances or services container for JavaScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
