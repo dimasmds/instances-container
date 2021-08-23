@@ -117,6 +117,11 @@ describe('InstanceContainer', () => {
       expect(dummyClass.deps).toEqual(instance.dependencies[0].concrete);
     });
 
+    it('should throw error when getting not found instance', () => {
+      expect(() => InstancesContainer.getInstance('bla'))
+        .toThrowError('instance not found');
+    });
+
     it('should create only one instance', () => {
       const instance: InstanceOption = {
         key: 'DummyClass',

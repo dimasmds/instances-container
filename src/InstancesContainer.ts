@@ -17,6 +17,10 @@ class InstancesContainer {
   static getInstance(key: string): any {
     const Instance = this.Instances[key];
 
+    if (!Instance) {
+      throw new Error('instance not found');
+    }
+
     if (Instance.INSTANCE instanceof Instance.Class) {
       return Instance.INSTANCE;
     }
