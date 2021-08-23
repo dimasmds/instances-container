@@ -1,7 +1,7 @@
 import InstanceOption from './definitions/InstanceOption';
 import Dependencies from './definitions/Dependencies';
 
-class InstancesContainer {
+export class InstancesContainer {
   static Instances: any = {};
 
   static registerInstances(options: InstanceOption[]) {
@@ -61,5 +61,3 @@ class InstancesContainer {
     Object.keys(this.Instances).map((key) => delete this.Instances[key].INSTANCE);
   }
 }
-
-export default InstancesContainer;

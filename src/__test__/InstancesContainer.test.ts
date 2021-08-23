@@ -1,5 +1,5 @@
 // eslint-disable-next-line max-classes-per-file
-import InstancesContainer from '../InstancesContainer';
+import { InstancesContainer } from '../InstancesContainer';
 import InstanceOption from '../definitions/InstanceOption';
 
 class OtherDummyClass {}

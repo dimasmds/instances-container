@@ -1,3 +1,1 @@
-import InstancesContainer from './InstancesContainer';
-
-export default InstancesContainer;
+export * from './InstancesContainer';
