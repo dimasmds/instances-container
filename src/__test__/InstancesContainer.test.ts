@@ -7,7 +7,7 @@ class OtherDummyClass {}
 class DummyClass {
   private deps: OtherDummyClass;
 
-  constructor({ deps }) {
+  constructor({ deps } : any) {
     this.deps = deps;
   }
 }

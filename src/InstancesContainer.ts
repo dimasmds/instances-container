@@ -27,7 +27,7 @@ class InstancesContainer {
   }
 
   private static buildDependencies(dependencies: Dependencies[]): any {
-    const deps = {};
+    const deps: any = {};
 
     dependencies.forEach((dependency) => {
       if (!dependency.internal && !dependency.concrete) {
@@ -42,6 +42,7 @@ class InstancesContainer {
         deps[dependency.name] = dependency.concrete;
         return;
       }
+
       deps[dependency.name] = this.getInstance(dependency.internal);
     });
 
