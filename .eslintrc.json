@@ -16,6 +16,14 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "linebreak-style": "off"
+        "linebreak-style": "off",
+        "import/extensions": "off"
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [".js", ".jsx", ".ts", ".tsx"]
+            }
+        }
     }
 }
