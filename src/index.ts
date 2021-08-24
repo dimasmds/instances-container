@@ -237,3 +237,7 @@ export class Container {
     return deps;
   }
 }
+
+export const createContainer = (options: InstanceOption[] | InstanceOption) => (
+  Array.isArray(options) ? new Container(options) : new Container([options])
+);
