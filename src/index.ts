@@ -7,6 +7,8 @@ export class Container {
 
   constructor(options: InstanceOption[]) {
     Container.verifyOptions(options);
+
+    this.initialize(options);
   }
 
   private static verifyOptions(options: InstanceOption[]) {
@@ -97,7 +99,7 @@ export class Container {
       }
 
       if (!dependency.name) {
-        throw new Error('dependency should contain key when using destructuring inject type');
+        throw new Error('dependency should contain name when using destructuring inject type');
       }
 
       if (typeof dependency.name !== 'string') {
@@ -143,6 +145,23 @@ export class Container {
       if (!dependency.concrete && !dependency.internal) {
         throw new Error('please define dependency in concrete or internal');
       }
+    });
+  }
+
+  private initialize(options: InstanceOption[]) {
+    options.forEach((option) => {
+      const { Class, parameter = { injectType: 'parameter', dependencies: [] } } = option;
+      const { key = Class.name } = option;
+
+      if (!parameter.injectType) {
+        parameter.injectType = 'parameter';
+      }
+
+      if (!parameter.dependencies) {
+        parameter.dependencies = [];
+      }
+
+      this.instances[key] = { key, Class, parameter };
     });
   }
 }

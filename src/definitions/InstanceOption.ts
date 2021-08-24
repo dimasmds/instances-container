@@ -2,7 +2,7 @@ import ParameterOption from './ParameterOption';
 
 interface InstanceOption {
   key?: string
-  Class: object
+  Class: Function
   parameter?: ParameterOption
 }
 

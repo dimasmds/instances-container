@@ -1,6 +1,7 @@
 // @ts-nocheck
 // eslint-disable-next-line max-classes-per-file
 import { Container } from '../index';
+import InstanceOption from '../definitions/InstanceOption';
 
 describe('instance-container', () => {
   describe('Container', () => {
@@ -173,7 +174,7 @@ describe('instance-container', () => {
                 },
               ];
 
-              expect(() => new Container(instanceOptions)).toThrowError('dependency should contain key when using destructuring inject type');
+              expect(() => new Container(instanceOptions)).toThrowError('dependency should contain name when using destructuring inject type');
             });
 
             it('should throw error when dependency name is not string', () => {
@@ -348,6 +349,164 @@ describe('instance-container', () => {
             });
           });
         });
+      });
+    });
+
+    describe('initialize', () => {
+      it('should initialize instances correctly when not defined key in parameter options', () => {
+        const options: InstanceOption[] = [
+          {
+            Class: class Car {},
+          },
+        ];
+
+        const container = new Container(options);
+
+        expect(container.instances.Car).toBeInstanceOf(Object);
+        expect(container.instances.Car.key).toBe('Car');
+        expect(container.instances.Car.Class).toEqual(options[0].Class);
+      });
+
+      it('should initialize instances correctly when defined key in parameter options', () => {
+        const options: InstanceOption[] = [
+          {
+            key: 'CarA',
+            Class: class Car {},
+          },
+        ];
+
+        const container = new Container(options);
+
+        expect(container.instances.CarA).toBeInstanceOf(Object);
+        expect(container.instances.CarA.key).toBe('CarA');
+        expect(container.instances.CarA.Class).toEqual(options[0].Class);
+      });
+
+      it('should initialize instances correctly when parameter object not defined', () => {
+        const options: InstanceOption[] = [
+          {
+            key: 'CarA',
+            Class: class Car {},
+          },
+        ];
+
+        const container = new Container(options);
+
+        expect(container.instances.CarA.parameter).toEqual({
+          injectType: 'parameter',
+          dependencies: [],
+        });
+      });
+
+      it('should initialize instances correctly when parameter object is defined with empty object', () => {
+        const options: InstanceOption[] = [
+          {
+            key: 'CarA',
+            Class: class Car {},
+            parameter: {},
+          },
+        ];
+
+        const container = new Container(options);
+
+        expect(container.instances.CarA.parameter).toEqual({
+          injectType: 'parameter',
+          dependencies: [],
+        });
+      });
+
+      it('should initialize instances correctly when parameter object is only defined dependencies', () => {
+        const options: InstanceOption[] = [
+          {
+            key: 'CarA',
+            Class: class Car {},
+            parameter: {
+              dependencies: [
+                {
+                  concrete: {},
+                },
+              ],
+            },
+          },
+        ];
+
+        const container = new Container(options);
+
+        expect(container.instances.CarA.parameter).toEqual({
+          injectType: 'parameter',
+          dependencies: [
+            {
+              concrete: {},
+            },
+          ],
+        });
+      });
+
+      it('should initialize instances correctly when injectType is destructuring', () => {
+        const options: InstanceOption[] = [
+          {
+            key: 'CarA',
+            Class: class Car {},
+            parameter: {
+              injectType: 'destructuring',
+            },
+          },
+        ];
+
+        const container = new Container(options);
+
+        expect(container.instances.CarA.parameter).toEqual({
+          injectType: 'destructuring',
+          dependencies: [],
+        });
+      });
+
+      it('should initialize instances correctly when given multiple instances options', () => {
+        const options: InstanceOption[] = [
+          {
+            key: 'CarA',
+            Class: class Car {},
+            parameter: {
+              injectType: 'destructuring',
+            },
+          },
+          {
+            key: 'CarB',
+            Class: class Car {},
+            parameter: {
+              injectType: 'parameter',
+              dependencies: [
+                {
+                  concrete: {},
+                },
+              ],
+            },
+          },
+        ];
+
+        const container = new Container(options);
+
+        expect(JSON.stringify(container.instances.CarA)).toEqual(JSON.stringify({
+          key: 'CarA',
+          Class: class Car {},
+          parameter: {
+            injectType: 'destructuring',
+            dependencies: [],
+          },
+        }));
+
+        expect(JSON.stringify(container.instances.CarB)).toEqual(JSON.stringify({
+          key: 'CarB',
+          Class: class Car {},
+          parameter: {
+            injectType: 'parameter',
+            dependencies: [
+              {
+                concrete: {},
+              },
+            ],
+          },
+        }));
       });
     });
   });
