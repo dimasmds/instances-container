@@ -1,1 +1,148 @@
-export * from './InstancesContainer';
+import InstanceOption from './definitions/InstanceOption';
+import ParameterOption from './definitions/ParameterOption';
+import Dependency from './definitions/Dependency';
+
+export class Container {
+  instances: any = {};
+
+  constructor(options: InstanceOption[]) {
+    Container.verifyOptions(options);
+  }
+
+  private static verifyOptions(options: InstanceOption[]) {
+    if (!options) {
+      throw new Error('should define an instance options');
+    }
+
+    if (!Array.isArray(options)) {
+      throw new Error('options should be an array');
+    }
+
+    options.forEach((option) => {
+      if (typeof option !== 'object' || Array.isArray(option)) {
+        throw new Error('options item should be an instance option object');
+      }
+
+      const keys = Object.keys(option);
+
+      const allowedProps = ['key', 'Class', 'parameter'];
+
+      const unknownProps = keys.filter((key) => !allowedProps.includes(key));
+
+      if (unknownProps.length) {
+        throw new Error(`${unknownProps.join(', ')} not allowed in instance option`);
+      }
+
+      if (!keys.includes('Class')) {
+        throw new Error('instance option should contain Class to be create later on');
+      }
+
+      // @ts-ignore
+      if (typeof option.Class !== 'function' && typeof option.Class.name !== 'string') {
+        throw new Error('Class should be a class or constructor function');
+      }
+
+      if (option.parameter) {
+        this.verifyParameterOption(option.parameter);
+      }
+    });
+  }
+
+  private static verifyParameterOption(optionParameter: ParameterOption) {
+    if (typeof optionParameter !== 'object' || Array.isArray(optionParameter)) {
+      throw new Error('parameter should be a parameter option object');
+    }
+
+    const keys = Object.keys(optionParameter);
+    const allowedProps = ['injectType', 'dependencies'];
+    const unknownProps = keys.filter((key) => !allowedProps.includes(key));
+
+    if (unknownProps.length) {
+      throw new Error(`${unknownProps.join(', ')} is not allowed in parameter option`);
+    }
+
+    if (optionParameter.injectType) {
+      const allowedValue = ['parameter', 'destructuring'];
+
+      if (!allowedValue.includes(optionParameter.injectType)) {
+        throw new Error(`parameter inject type should be ${allowedValue.join(' or ')}`);
+      }
+
+      if (optionParameter.dependencies) {
+        if (optionParameter.injectType === 'destructuring') {
+          this.verifyDestructuringDependencies(optionParameter.dependencies);
+        }
+
+        this.verifyParameterDependencies(optionParameter.dependencies);
+      }
+    }
+  }
+
+  private static verifyDestructuringDependencies(dependencies: Dependency[]) {
+    if (!Array.isArray(dependencies)) {
+      throw new Error('dependencies should be an array');
+    }
+
+    dependencies.forEach((dependency) => {
+      if (typeof dependency !== 'object' || Array.isArray(dependency)) {
+        throw new Error('dependencies item should be a dependency object');
+      }
+
+      const keys = Object.keys(dependency);
+      const allowedProps = ['name', 'concrete', 'internal'];
+      const unknownProps = keys.filter((key) => !allowedProps.includes(key));
+
+      if (unknownProps.length) {
+        throw new Error(`${unknownProps.join(', ')} is not allowed in dependency object`);
+      }
+
+      if (!dependency.name) {
+        throw new Error('dependency should contain key when using destructuring inject type');
+      }
+
+      if (typeof dependency.name !== 'string') {
+        throw new Error('dependency name should be a string');
+      }
+
+      if (dependency.concrete && dependency.internal) {
+        throw new Error('cannot define concrete and internal together');
+      }
+
+      if (!dependency.concrete && !dependency.internal) {
+        throw new Error('please define dependency in concrete or internal');
+      }
+    });
+  }
+
+  private static verifyParameterDependencies(dependencies: Dependency[]) {
+    if (!Array.isArray(dependencies)) {
+      throw new Error('dependencies should be an array');
+    }
+
+    dependencies.forEach((dependency) => {
+      if (typeof dependency !== 'object' || Array.isArray(dependency)) {
+        throw new Error('dependencies item should be a dependency object');
+      }
+
+      if (dependency.name) {
+        throw new Error('no need to define name when using parameter inject type');
+      }
+
+      const keys = Object.keys(dependency);
+      const allowedProps = ['concrete', 'internal'];
+      const unknownProps = keys.filter((key) => !allowedProps.includes(key));
+
+      if (unknownProps.length) {
+        throw new Error(`${unknownProps.join(', ')} is not allowed in dependency object`);
+      }
+
+      if (dependency.concrete && dependency.internal) {
+        throw new Error('cannot define concrete and internal together');
+      }
+
+      if (!dependency.concrete && !dependency.internal) {
+        throw new Error('please define dependency in concrete or internal');
+      }
+    });
+  }
+}

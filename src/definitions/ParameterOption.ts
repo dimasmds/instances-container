@@ -1,8 +1,8 @@
-import Dependencies from './Dependencies';
+import Dependency from './Dependency';
 
 interface ParameterOption {
-  injectType: 'parameter' | 'destructuring'
-  dependencies: Dependencies[]
+  injectType?: 'parameter' | 'destructuring'
+  dependencies?: Dependency[]
 }
 
 export default ParameterOption;
