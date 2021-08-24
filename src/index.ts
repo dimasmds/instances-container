@@ -200,6 +200,10 @@ export class Container {
     delete this.instances[key].INSTANCE;
   }
 
+  public destroyAllInstances() {
+    Object.keys(this.instances).forEach((key) => delete this.instances[key].INSTANCE);
+  }
+
   private buildParameters(parameter: ParameterOption): any {
     if (parameter.injectType === 'destructuring') {
       const deps: any = {};

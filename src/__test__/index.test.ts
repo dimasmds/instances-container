@@ -693,5 +693,63 @@ describe('instance-container', () => {
         expect(container.instances.Engine.INSTANCE).toEqual(undefined);
       });
     });
+
+    describe('destroyAllInstances', () => {
+      let container;
+      beforeEach(() => {
+        const instanceOptions: InstanceOption[] = [
+          {
+            Class: class Engine {
+              constructor(petrol) {
+                this.petrol = petrol;
+              }
+            },
+            parameter: {
+              dependencies: [
+                {
+                  concrete: {}, // dummy petrol
+                },
+              ],
+            },
+          },
+          {
+            Class: class Car {
+              constructor({ engine, doorCount }) {
+                this.engine = engine;
+                this.doorCount = doorCount;
+              }
+            },
+            parameter: {
+              injectType: 'destructuring',
+              dependencies: [
+                {
+                  name: 'engine',
+                  internal: 'Engine',
+                },
+                {
+                  name: 'doorCount',
+                  concrete: 4,
+                },
+              ],
+            },
+          },
+        ];
+
+        container = new Container(instanceOptions);
+      });
+
+      it('should destroy all active instance', () => {
+        container.getInstance('Car');
+        expect(container.instances.Engine.INSTANCE)
+          .toBeInstanceOf(container.instances.Engine.Class);
+        expect(container.instances.Car.INSTANCE)
+          .toBeInstanceOf(container.instances.Car.Class);
+
+        container.destroyAllInstances();
+
+        expect(container.instances.Engine.INSTANCE).toBe(undefined);
+        expect(container.instances.Car.INSTANCE).toBe(undefined);
+      });
+    });
   });
 });
