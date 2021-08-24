@@ -653,5 +653,45 @@ describe('instance-container', () => {
           .toBeInstanceOf(container.instances.Engine.Class);
       });
     });
+
+    describe('destroyInstance', () => {
+      let container;
+      beforeEach(() => {
+        const instanceOptions: InstanceOption[] = [
+          {
+            Class: class Engine {
+              constructor(petrol) {
+                this.petrol = petrol;
+              }
+            },
+            parameter: {
+              dependencies: [
+                {
+                  concrete: {}, // dummy petrol
+                },
+              ],
+            },
+          },
+        ];
+
+        container = new Container(instanceOptions);
+      });
+
+      it('should throw error when instance is not found', () => {
+        expect(() => container.destroyInstance('not_found'))
+          .toThrowError('not found instance to be destroy');
+      });
+
+      it('should delete active instance correctly', () => {
+        container.getInstance('Engine');
+
+        expect(container.instances.Engine.INSTANCE)
+          .toBeInstanceOf(container.instances.Engine.Class);
+
+        container.destroyInstance('Engine');
+
+        expect(container.instances.Engine.INSTANCE).toEqual(undefined);
+      });
+    });
   });
 });

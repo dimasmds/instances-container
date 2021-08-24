@@ -192,6 +192,14 @@ export class Container {
     return instance.INSTANCE;
   }
 
+  public destroyInstance(key: string) {
+    if (!this.instances[key]) {
+      throw new Error('not found instance to be destroy');
+    }
+
+    delete this.instances[key].INSTANCE;
+  }
+
   private buildParameters(parameter: ParameterOption): any {
     if (parameter.injectType === 'destructuring') {
       const deps: any = {};
