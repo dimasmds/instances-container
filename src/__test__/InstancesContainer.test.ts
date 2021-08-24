@@ -15,7 +15,7 @@ class DummyClass {
 class DummyClassWithNormalParam {
   private deps: OtherDummyClass;
 
-  constructor(deps) {
+  constructor(deps: any) {
     this.deps = deps;
   }
 }

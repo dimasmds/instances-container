@@ -58,7 +58,7 @@ export class InstancesContainer {
     }
 
     // Build normal parameters
-    const deps = [];
+    const deps: any = [];
     const { dependencies } = parameter;
 
     dependencies.forEach((dependency, index) => {
