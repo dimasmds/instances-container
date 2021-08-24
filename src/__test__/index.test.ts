@@ -236,6 +236,28 @@ describe('instance-container', () => {
 
               expect(() => new Container(instanceOptions)).toThrowError('please define dependency in concrete or internal');
             });
+
+            describe('when internal is defined', () => {
+              it('should throw error if not string', () => {
+                const instanceOptions: any[] = [
+                  {
+                    key: 'class a',
+                    Class: class {},
+                    parameter: {
+                      injectType: 'destructuring',
+                      dependencies: [
+                        {
+                          name: 'class a',
+                          internal: 123,
+                        },
+                      ],
+                    },
+                  },
+                ];
+
+                expect(() => new Container(instanceOptions)).toThrowError('internal property only accept string');
+              });
+            });
           });
 
           describe('when dependencies is defined and injectType is parameter', () => {
@@ -346,6 +368,27 @@ describe('instance-container', () => {
               ];
 
               expect(() => new Container(instanceOptions)).toThrowError('please define dependency in concrete or internal');
+            });
+
+            describe('when internal is defined', () => {
+              it('should throw error if not string', () => {
+                const instanceOptions: any[] = [
+                  {
+                    key: 'class a',
+                    Class: class {},
+                    parameter: {
+                      injectType: 'parameter',
+                      dependencies: [
+                        {
+                          internal: 123,
+                        },
+                      ],
+                    },
+                  },
+                ];
+
+                expect(() => new Container(instanceOptions)).toThrowError('internal property only accept string');
+              });
             });
           });
         });

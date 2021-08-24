@@ -73,6 +73,7 @@ export class Container {
       if (optionParameter.dependencies) {
         if (optionParameter.injectType === 'destructuring') {
           this.verifyDestructuringDependencies(optionParameter.dependencies);
+          return;
         }
 
         this.verifyParameterDependencies(optionParameter.dependencies);
@@ -113,6 +114,10 @@ export class Container {
       if (!dependency.concrete && !dependency.internal) {
         throw new Error('please define dependency in concrete or internal');
       }
+
+      if (dependency.internal && typeof dependency.internal !== 'string') {
+        throw new Error('internal property only accept string');
+      }
     });
   }
 
@@ -144,6 +149,10 @@ export class Container {
 
       if (!dependency.concrete && !dependency.internal) {
         throw new Error('please define dependency in concrete or internal');
+      }
+
+      if (dependency.internal && typeof dependency.internal !== 'string') {
+        throw new Error('internal property only accept string');
       }
     });
   }
