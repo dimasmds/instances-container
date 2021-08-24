@@ -199,14 +199,6 @@ export class Container {
 
       // Build destructuring params
       dependencies.forEach((dependency) => {
-        if (!dependency.internal && !dependency.concrete) {
-          throw new Error('please give concrete or internal type of dependencies');
-        }
-
-        if (dependency.internal && dependency.concrete) {
-          throw new Error('cannot give concrete and internal together');
-        }
-
         if (dependency.concrete) {
           deps[dependency.name] = dependency.concrete;
           return;
@@ -222,14 +214,6 @@ export class Container {
     const { dependencies } = parameter;
 
     dependencies.forEach((dependency, index) => {
-      if (!dependency.internal && !dependency.concrete) {
-        throw new Error('please give concrete or internal type of dependencies');
-      }
-
-      if (dependency.internal && dependency.concrete) {
-        throw new Error('cannot give concrete and internal together');
-      }
-
       if (dependency.concrete) {
         deps[index] = dependency.concrete;
         return;

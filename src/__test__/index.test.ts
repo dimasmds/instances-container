@@ -593,6 +593,24 @@ describe('instance-container', () => {
               ],
             },
           },
+          {
+            Class: class Motorcycle {
+              constructor(engine, isMatic) {
+                this.engine = engine;
+                this.isMatic = isMatic;
+              }
+            },
+            parameter: {
+              dependencies: [
+                {
+                  internal: 'Engine',
+                },
+                {
+                  concrete: true,
+                },
+              ],
+            },
+          },
         ];
 
         container = new Container(instanceOptions);
@@ -600,10 +618,15 @@ describe('instance-container', () => {
 
       it('should get instance correctly', () => {
         const car = container.getInstance('Car');
+        const bike = container.getInstance('Motorcycle');
 
         expect(car).toBeInstanceOf(container.instances.Car.Class);
         expect(car.doorCount).toEqual(4);
         expect(car.engine).toBeInstanceOf(container.instances.Engine.Class);
+
+        expect(bike).toBeInstanceOf(container.instances.Motorcycle.Class);
+        expect(bike.isMatic).toEqual(true);
+        expect(bike.engine).toBeInstanceOf(container.instances.Engine.Class);
       });
 
       it('should throw error when instance not found', () => {
