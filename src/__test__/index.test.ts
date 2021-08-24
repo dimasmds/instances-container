@@ -552,5 +552,83 @@ describe('instance-container', () => {
         }));
       });
     });
+
+    describe('getInstance', () => {
+      let container;
+
+      beforeEach(() => {
+        const instanceOptions: InstanceOption[] = [
+          {
+            Class: class Engine {
+              constructor(petrol) {
+                this.petrol = petrol;
+              }
+            },
+            parameter: {
+              dependencies: [
+                {
+                  concrete: {}, // dummy petrol
+                },
+              ],
+            },
+          },
+          {
+            Class: class Car {
+              constructor({ engine, doorCount }) {
+                this.engine = engine;
+                this.doorCount = doorCount;
+              }
+            },
+            parameter: {
+              injectType: 'destructuring',
+              dependencies: [
+                {
+                  name: 'engine',
+                  internal: 'Engine',
+                },
+                {
+                  name: 'doorCount',
+                  concrete: 4,
+                },
+              ],
+            },
+          },
+        ];
+
+        container = new Container(instanceOptions);
+      });
+
+      it('should get instance correctly', () => {
+        const car = container.getInstance('Car');
+
+        expect(car).toBeInstanceOf(container.instances.Car.Class);
+        expect(car.doorCount).toEqual(4);
+        expect(car.engine).toBeInstanceOf(container.instances.Engine.Class);
+      });
+
+      it('should throw error when instance not found', () => {
+        expect(() => container.getInstance('abc'))
+          .toThrowError('instance not found');
+      });
+
+      it('should only create one instance (singleton)', () => {
+        const car1 = container.getInstance('Car');
+        const car2 = container.getInstance('Car');
+
+        expect(car1 === car2).toBe(true);
+      });
+
+      it('should create instance only when needed (lazy)', () => {
+        expect(container.instances.Car.INSTANCE).toBe(undefined);
+        expect(container.instances.Engine.INSTANCE).toBe(undefined);
+
+        container.getInstance('Car');
+
+        expect(container.instances.Car.INSTANCE)
+          .toBeInstanceOf(container.instances.Car.Class);
+        expect(container.instances.Engine.INSTANCE)
+          .toBeInstanceOf(container.instances.Engine.Class);
+      });
+    });
   });
 });

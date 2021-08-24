@@ -173,4 +173,71 @@ export class Container {
       this.instances[key] = { key, Class, parameter };
     });
   }
+
+  public getInstance(key: string) {
+    const instance = this.instances[key];
+
+    if (!instance) {
+      throw new Error('instance not found');
+    }
+
+    if (instance.INSTANCE instanceof instance.Class) {
+      return instance.INSTANCE;
+    }
+
+    const parameters = this.buildParameters(instance.parameter);
+    instance.INSTANCE = Array.isArray(parameters)
+      ? new instance.Class(...parameters)
+      : new instance.Class(parameters);
+    return instance.INSTANCE;
+  }
+
+  private buildParameters(parameter: ParameterOption): any {
+    if (parameter.injectType === 'destructuring') {
+      const deps: any = {};
+      const { dependencies } = parameter;
+
+      // Build destructuring params
+      dependencies.forEach((dependency) => {
+        if (!dependency.internal && !dependency.concrete) {
+          throw new Error('please give concrete or internal type of dependencies');
+        }
+
+        if (dependency.internal && dependency.concrete) {
+          throw new Error('cannot give concrete and internal together');
+        }
+
+        if (dependency.concrete) {
+          deps[dependency.name] = dependency.concrete;
+          return;
+        }
+
+        deps[dependency.name] = this.getInstance(dependency.internal);
+      });
+      return deps;
+    }
+
+    // Build normal parameters
+    const deps: any = [];
+    const { dependencies } = parameter;
+
+    dependencies.forEach((dependency, index) => {
+      if (!dependency.internal && !dependency.concrete) {
+        throw new Error('please give concrete or internal type of dependencies');
+      }
+
+      if (dependency.internal && dependency.concrete) {
+        throw new Error('cannot give concrete and internal together');
+      }
+
+      if (dependency.concrete) {
+        deps[index] = dependency.concrete;
+        return;
+      }
+
+      deps[index] = this.getInstance(dependency.internal);
+    });
+
+    return deps;
+  }
 }
