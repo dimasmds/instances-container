@@ -8,7 +8,7 @@ export class Container {
   constructor(options: InstanceOption[] = []) {
     Container.verifyOptions(options);
 
-    this.initialize(options);
+    this.addInstances(options);
   }
 
   private static verifyOptions(options: InstanceOption[]) {
@@ -157,7 +157,7 @@ export class Container {
     });
   }
 
-  private initialize(options: InstanceOption[]) {
+  private addInstances(options: InstanceOption[]) {
     options.forEach((option) => {
       const { Class, parameter = { injectType: 'parameter', dependencies: [] } } = option;
       const { key = Class.name } = option;
@@ -202,6 +202,15 @@ export class Container {
 
   public destroyAllInstances() {
     Object.keys(this.instances).forEach((key) => delete this.instances[key].INSTANCE);
+  }
+
+  public register(options: InstanceOption[] | InstanceOption) {
+    if (Array.isArray(options)) {
+      this.addInstances(options);
+      return;
+    }
+
+    this.addInstances([options]);
   }
 
   private buildParameters(parameter: ParameterOption): any {

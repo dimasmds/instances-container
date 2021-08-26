@@ -755,4 +755,33 @@ describe('Container', () => {
       expect(container.instances.Car.INSTANCE).toBe(undefined);
     });
   });
+
+  describe('register', () => {
+    it('should register class correctly when only given a single instance option', () => {
+      const container = new Container();
+
+      class Engine {}
+
+      container.register({ Class: Engine });
+
+      expect(container.instances.Engine.Class).toEqual(Engine);
+      expect(container.instances.Engine.key).toEqual('Engine');
+    });
+
+    it('should register class correctly when given a multiple instance option', () => {
+      const container = new Container();
+
+      class Engine {}
+
+      class Oil {}
+
+      container.register([{ Class: Engine }, { Class: Oil }]);
+
+      expect(container.instances.Engine.Class).toEqual(Engine);
+      expect(container.instances.Engine.key).toEqual('Engine');
+
+      expect(container.instances.Oil.Class).toEqual(Oil);
+      expect(container.instances.Oil.key).toEqual('Oil');
+    });
+  });
 });
