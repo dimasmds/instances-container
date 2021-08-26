@@ -5,7 +5,7 @@ import Dependency from './definitions/Dependency';
 export class Container {
   instances: any = {};
 
-  constructor(options: InstanceOption[]) {
+  constructor(options: InstanceOption[] = []) {
     Container.verifyOptions(options);
 
     this.initialize(options);

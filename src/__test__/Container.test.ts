@@ -6,7 +6,6 @@ import { Container } from '../Container';
 describe('Container', () => {
   describe('verify instance options', () => {
     it('should throw error when instance option not array', () => {
-      expect(() => new Container()).toThrowError('should define an instance options');
       expect(() => new Container({})).toThrowError('options should be an array');
     });
 
@@ -395,6 +394,12 @@ describe('Container', () => {
   });
 
   describe('initialize', () => {
+    it('should initialize instances correctly when not defined options', () => {
+      const container = new Container();
+
+      expect(container).toBeInstanceOf(Container);
+    });
+
     it('should initialize instances correctly when not defined key in parameter options', () => {
       const options: InstanceOption[] = [
         {
