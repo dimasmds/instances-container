@@ -2,8 +2,15 @@
 // eslint-disable-next-line max-classes-per-file
 import InstanceOption from '../definitions/InstanceOption';
 import { createContainer } from '../createContainer';
+import { Container } from '../Container';
 
 describe('createContainer', () => {
+  it('should create container correctly when not given an option', () => {
+    const container = createContainer();
+
+    expect(container).toBeInstanceOf(Container);
+  });
+
   it('should create container correctly when given single instance option', () => {
     const instanceOption: InstanceOption = {
       Class: class Car {},
