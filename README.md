@@ -1,5 +1,6 @@
 # instances-container
-// Badge collection
+[![Continuous Integration](https://github.com/dimasmds/instances-container/actions/workflows/ci.yml/badge.svg)](https://github.com/dimasmds/instances-container/actions/workflows/ci.yml) [![NPM](https://nodei.co/npm/instances-container.png?mini=true)](https://npmjs.org/package/instances-container)
+
 > Simple instances or services container for JavaScript.
 
 ## Introduction
