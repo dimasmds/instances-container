@@ -4,7 +4,7 @@
 
 ## Introduction
 instances-container is a super simple, light, and zero dependencies of DI for JavaScript. When your project using instances-containers, you can to easily:
- - Make a singleton instances under the hood.
+ - Make a singleton instance under the hood.
  - Only create instances when needed a.k.a lazy load.
  - Easy to destroy to free up your memory.
  - Easy to use.
@@ -15,7 +15,7 @@ You can easily install using npm:
     npm install instances-container
 
 ## The Simplest Example
-The simplest way to use instance container is looks like this:
+The simplest way to use an instance container looks like this:
 
 ```JavaScript
 const { createContainer } = require('instances-container');
@@ -36,7 +36,7 @@ console.log(engine === engine2); // true
 
 ## More Samples
 
-**Registering class with parameters**
+**Registering classes that have parameters**
 
 ```JavaScript
 const { createContainer } = require('instances-container')
@@ -79,7 +79,7 @@ console.log(car.engine instanceof Engine); // true
 console.log(car.power); // 10
 ```
 
-**Registering class with a proxy parameter (destructuring)**
+**Registering class have a proxy parameter (destructuring)**
 
 ```JavaScript
 const { createContainer } = require('instances-container')
@@ -161,4 +161,142 @@ console.log(engine instanceof Engine); // true
 
 
 ```
+
+
+## API Documentation
+### createServer(options)
+Used to create an instance of `Container`. The `options` parameter is `InstanceOption` or `InstanceOption[]`, which means you also can register a single or multiple class while creating a container.
+
+Example: creating a container and registering a single class into it.
+
+
+```JavaScript
+const { createContainer } = require('instances-container');
+
+class Engine {}
+const container = createContainer({ Class: Engine });
+```
+
+Example: creating container and registering multiple class into it.
+```JavaScript
+const { createContainer } = require('instances-container');
+
+class Engine {}
+class Oil {}
+const container = createContainer([ { Class: Engine }, { Class: Oil }]);
+```
+
+`createContainer()` will return instance of `Container`.
+
+### Container
+The container returned from `createContainer` has some methods.
+
+#### container.getInstance(key)
+Get instance from the registered class using a key.
+
+Example:
+```JavaScript
+const { createContainer } = require('instances-container');
+
+class Engine {}
+class Oil {}
+
+const container = createContainer([ { Class: Engine }, { Class: Oil }]);
+
+// get Engine instance
+const engine = container.getInstance('Engine');
+// get Oil instance
+const oil = container.getInstance('Oil');
+```
+
+### container.register(options)
+Register a single or multiple class to a subject `container`. The `options` is `InstanceOption` or `InstanceOption[]`.
+
+Example: 
+
+```JavaScript
+const { createContainer } = require('instances-container');
+
+
+const container = createContainer();
+class Engine {}
+
+// register an Engine class after container creation
+container.register({ Class: Engine });
+
+```
+
+### container.destroyInstance(key)
+Every registered class that has been accessed will create an instance in `container.instances[key].INSTANCE`.
+The `container.deleteInstance(key)` is used to delete the instance of the registered class to free up some memory.
+
+Example:
+
+```JavaScript
+const { createContainer } = require('instances-container');
+
+
+class Engine {}
+const container = createContainer({ Class: Engine });
+
+container.getInstance('Engine');
+
+console.log(container.instances.Engine.INSTANCE instanceof Engine); // true
+
+container.destroyInstance('Engine');
+
+console.log(container.instances.Engine.INSTANCE === undefined); // true
+```
+
+### container.destroyInstance(key)
+Used to delete all the instances of the registered class to free up some memory.
+
+Example:
+
+```JavaScript
+const { createContainer } = require('instances-container');
+
+
+class Engine {}
+class Oil {}
+const container = createContainer([{ Class: Engine }, { Class: Oil }]);
+
+container.getInstance('Engine');
+container.getInstance('Oil');
+
+console.log(container.instances.Engine.INSTANCE instanceof Engine); // true
+console.log(container.instances.Oil.INSTANCE instanceof Oil); // true
+
+container.destroyAllInstances()
+
+console.log(container.instances.Engine.INSTANCE === undefined); // true
+console.log(container.instances.Oil.INSTANCE === undefined); // true
+
+```
+
+### InstanceOption
+`InstanceOption` is an option passed to `createContainer` or `container.register`.
+
+| property    | Type                           | Description |
+| ----------- | ------------------------------ | ----------- |
+| key         | string _(optional)_            | Key for getting or delete an instance from the container. Will use `Class.name` for default. |
+| Class       | class or function              | The class or function constructor is to be registered to the container. |
+| parameter   | `ParameterOption` _(optional)_ | The property is used to define the parameter options of the class to be registered. If not set, that means the class doesn't require any parameters. |
+
+### ParameterOption
+`ParameterOption` is the option required by `InstanceOption` to define `parameter` property.
+
+| property     | Type                           | Description |
+| -----------  | ------------------------------ | ----------- |
+| injectType   | `"parameter"` or `"destructuring"` _(optional)_ | The type of technique used in assigning parameters to the Class. The default is `"parameter"`, but you can change it to `"destructuring"`. |
+| Dependencies | `Dependencies[]`             | Option to put a value that is a dependency (parameter) of the Class. |
+
+### Dependency
+`Dependency` is needed to define the dependency value used by `ParameterOption`.
+
+| property    | Type                           | Description |
+| ----------- | ------------------------------ | ----------- |
+| name        | string _(optional)_            | Object dependency parameter name. **Only define when you are using destructuring inject type**. |
+| concrete    | any _(optional)_               | Using a concrete value for dependency. It can be anything. Cannot be set together with `internal` property.  |
+| internal    | string _(optional)_            | Using internal value (from `container`) for dependency. The string is the `key` of class. Cannot be set together with `concrete` property. |
 
