@@ -8,7 +8,7 @@
     "test": "jest ./src --coverage",
     "test:watch": "jest ./src --coverage --watch",
     "build": "tsc --build .tsconfig.json",
-    "lint": "eslint src/**",
+    "lint": "eslint ./src/**",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint"
   },
