@@ -10,10 +10,6 @@ export class Container {
   }
 
   private static verifyOptions(options: InstanceOption[]) {
-    if (!options) {
-      throw new Error('should define an instance options');
-    }
-
     if (!Array.isArray(options)) {
       throw new Error('options should be an array');
     }

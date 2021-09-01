@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "jest --coverage",
+    "test": "jest ./src --coverage",
     "test:watch": "jest --watch",
     "build": "tsc --build .tsconfig.json",
     "lint": "eslint src/**",
