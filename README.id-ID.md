@@ -8,7 +8,7 @@
 > Simpel instances atau services container untuk JavaScript.
 
 ## Introduction
-instances-container merupakan package yang sangat sederhana, ringan, dan tidak memiliki dependecies terhadap package lain dalam menerapkan DI untuk JavaScript. Ketika proyek Anda menggunakan instances-container, Anda dapat secara mudah:
+instances-container merupakan package yang sangat sederhana, ringan, dan tidak memiliki dependecies terhadap package lain dalam menerapkan service locator untuk JavaScript. Ketika proyek Anda menggunakan instances-container, Anda dapat secara mudah:
  - Membuat instance singleton di balik layar.
  - Hanya membuat instance ketika dibutuhkan, alias _lazy load_.
  - Instance mudah untuk dihapus guna menghapus ruang penggunaan memori.
