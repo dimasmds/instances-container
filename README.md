@@ -10,7 +10,7 @@
 :bangbang: [Baca deksripsi dalam Bahasa Indonesia.](https://github.com/dimasmds/instances-container/blob/master/README.id-ID.md)
 
 ## Introduction
-instances-container is a super simple, light, and zero dependencies of DI for JavaScript. When your project using instances-containers, you can to easily:
+instances-container is a super simple, light, and zero dependencies of service locator for JavaScript. When your project using instances-containers, you can to easily:
  - Make a singleton instance under the hood.
  - Only create instances when needed a.k.a lazy load.
  - Easy to destroy to free up your memory.
