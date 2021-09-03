@@ -1,7 +1,6 @@
 # instances-container
 [![NPM](https://nodei.co/npm/instances-container.png?mini=true)](https://npmjs.org/package/instances-container)
 [![Continuous Integration](https://github.com/dimasmds/instances-container/actions/workflows/ci.yml/badge.svg)](https://github.com/dimasmds/instances-container/actions/workflows/ci.yml)
-[![JavaScript Style Guide: AirBnB](https://img.shields.io/badge/code%20style-goodparts-brightgreen.svg?style=flat)](https://github.com/dwyl/goodparts "JavaScript The Good Parts")
 [![Code Style](https://badgen.net/badge/code%20style/airbnb/ff5a5f?icon=airbnb)](https://github.com/airbnb/javascript)
 
 
