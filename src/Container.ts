@@ -1,6 +1,4 @@
-import InstanceOption from './definitions/InstanceOption';
-import ParameterOption from './definitions/ParameterOption';
-import Dependency from './definitions/Dependency';
+import { InstanceOption, ParameterOption, Dependency } from './definitions';
 
 export class Container {
   instances: any = {};

@@ -1,9 +1,7 @@
-import ParameterOption from './ParameterOption';
+import { ParameterOption } from './ParameterOption';
 
-interface InstanceOption {
+export interface InstanceOption {
   key?: string
   Class: any
   parameter?: ParameterOption
 }
-
-export default InstanceOption;
