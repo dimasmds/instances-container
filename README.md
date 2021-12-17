@@ -234,7 +234,7 @@ container.register({ Class: Engine });
 
 ### container.destroyInstance(key)
 Every registered class that has been accessed will create an instance in `container.instances[key].INSTANCE`.
-The `container.deleteInstance(key)` is used to delete the instance of the registered class to free up some memory.
+The `container.destroyInstance(key)` is used to delete the instance of the registered class to free up some memory.
 
 Example:
 
@@ -254,7 +254,7 @@ container.destroyInstance('Engine');
 console.log(container.instances.Engine.INSTANCE === undefined); // true
 ```
 
-### container.destroyInstance(key)
+### container.destroyAllInstances(key)
 Used to delete all the instances of the registered class to free up some memory.
 
 Example:
