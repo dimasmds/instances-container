@@ -229,7 +229,7 @@ container.register({ Class: Engine });
 
 ### container.destroyInstance(key)
 Setiap class yang didaftarkan diakses, ia akan membuat instance di dalam properti `container.instances[key].INSTANCE`.
-Fungsi `container.deleteInstance(key)` digunakan untuk menghapus instance dari class untuk menghapus ruang penggunaan memory.
+Fungsi `container.destroyInstance(key)` digunakan untuk menghapus instance dari class untuk menghapus ruang penggunaan memory.
 
 Example:
 
