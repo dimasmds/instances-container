@@ -44,7 +44,7 @@ export class Container {
 
   private static verifyParameterOption(optionParameter: ParameterOption) {
     if (typeof optionParameter !== 'object' || Array.isArray(optionParameter)) {
-      throw new Error('parameter should be a parameter option object');
+      throw new Error('parameter should be a ParameterOption object');
     }
 
     const keys = Object.keys(optionParameter);
@@ -80,7 +80,7 @@ export class Container {
 
     dependencies.forEach((dependency) => {
       if (typeof dependency !== 'object' || Array.isArray(dependency)) {
-        throw new Error('dependencies item should be a dependency object');
+        throw new Error('dependencies item should be a Dependency object');
       }
 
       const keys = Object.keys(dependency);
@@ -88,7 +88,7 @@ export class Container {
       const unknownProps = keys.filter((key) => !allowedProps.includes(key));
 
       if (unknownProps.length) {
-        throw new Error(`${unknownProps.join(', ')} is not allowed in dependency object`);
+        throw new Error(`${unknownProps.join(', ')} is not allowed in Dependency object`);
       }
 
       if (!dependency.name) {
