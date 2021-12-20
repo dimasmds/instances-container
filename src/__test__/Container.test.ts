@@ -68,7 +68,7 @@ describe('Container', () => {
           },
         ];
 
-        expect(() => new Container(instanceOptions)).toThrowError('parameter should be a parameter option object');
+        expect(() => new Container(instanceOptions)).toThrowError('parameter should be a ParameterOption object');
       });
 
       it('should throw error when parameter is contain unknown property', () => {
@@ -131,7 +131,7 @@ describe('Container', () => {
               },
             ];
 
-            expect(() => new Container(instanceOptions)).toThrowError('dependencies item should be a dependency object');
+            expect(() => new Container(instanceOptions)).toThrowError('dependencies item should be a Dependency object');
           });
 
           it('should throw error when dependency is contain unknown property', () => {
@@ -153,7 +153,7 @@ describe('Container', () => {
               },
             ];
 
-            expect(() => new Container(instanceOptions)).toThrowError('unknownA, unknownB is not allowed in dependency object');
+            expect(() => new Container(instanceOptions)).toThrowError('unknownA, unknownB is not allowed in Dependency object');
           });
 
           it('should throw error when dependency is not contain name property', () => {
@@ -635,7 +635,7 @@ describe('Container', () => {
 
     it('should throw error when instance not found', () => {
       expect(() => container.getInstance('abc'))
-        .toThrowError('instance not found');
+        .toThrow('abc instance not found');
     });
 
     it('should only create one instance (singleton)', () => {
@@ -683,7 +683,7 @@ describe('Container', () => {
 
     it('should throw error when instance is not found', () => {
       expect(() => container.destroyInstance('not_found'))
-        .toThrowError('not found instance to be destroy');
+        .toThrowError('Cannot destroy instance with key not_found. Because it is not exist');
     });
 
     it('should delete active instance correctly', () => {
