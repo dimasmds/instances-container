@@ -635,7 +635,7 @@ describe('Container', () => {
 
     it('should throw error when instance not found', () => {
       expect(() => container.getInstance('abc'))
-        .toThrowError('instance not found');
+        .toThrow('abc instance not found');
     });
 
     it('should only create one instance (singleton)', () => {
@@ -683,7 +683,7 @@ describe('Container', () => {
 
     it('should throw error when instance is not found', () => {
       expect(() => container.destroyInstance('not_found'))
-        .toThrowError('not found instance to be destroy');
+        .toThrowError('Cannot destroy instance with key not_found. Because it is not exist');
     });
 
     it('should delete active instance correctly', () => {

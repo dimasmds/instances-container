@@ -172,7 +172,7 @@ export class Container {
     const instance = this.instances[key];
 
     if (!instance) {
-      throw new Error('instance not found');
+      throw new Error(`${key} instance not found`);
     }
 
     if (instance.INSTANCE instanceof instance.Class) {
@@ -188,7 +188,7 @@ export class Container {
 
   public destroyInstance(key: string) {
     if (!this.instances[key]) {
-      throw new Error('not found instance to be destroy');
+      throw new Error(`Cannot destroy instance with key ${key}. Because it is not exist`);
     }
 
     delete this.instances[key].INSTANCE;
