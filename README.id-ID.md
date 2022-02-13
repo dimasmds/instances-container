@@ -249,7 +249,7 @@ container.destroyInstance('Engine');
 console.log(container.instances.Engine.INSTANCE === undefined); // true
 ```
 
-### container.destroyInstance(key)
+### container.destroyAllInstances()
 Fungsi yang digunakan untuk menghapus seluruh instances dari class yang terdaftar guna menghapus ruang penggunaan memory.
 
 Example:
