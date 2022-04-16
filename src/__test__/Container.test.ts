@@ -10,9 +10,8 @@ describe('Container', () => {
     });
 
     it('should throw error when option item not an object', () => {
-      const instanceOptions: any[] = ['string', 1, {}];
-
-      expect(() => new Container(instanceOptions)).toThrowError('options item should be an instance option object');
+      expect(() => new Container(['string', 1, {}])).toThrowError('options item should be an instance option object');
+      expect(() => new Container([null, {}, {}])).toThrowError('options item should be an instance option object');
     });
 
     it('should throw error when instance option contain unknown property', () => {
