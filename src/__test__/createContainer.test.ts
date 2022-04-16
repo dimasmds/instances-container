@@ -11,6 +11,14 @@ describe('createContainer', () => {
     expect(container).toBeInstanceOf(Container);
   });
 
+  it('should throw error when given by null option', () => {
+    expect(() => {
+      createContainer(null);
+    }).toThrowError(
+      'options item should be an instance option object',
+    );
+  });
+
   it('should create container correctly when given single instance option', () => {
     const instanceOption: InstanceOption = {
       Class: class Car {},

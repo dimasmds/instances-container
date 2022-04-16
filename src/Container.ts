@@ -1,4 +1,5 @@
 import { InstanceOption, ParameterOption, Dependency } from './definitions';
+import { isObject } from './utils';
 
 export class Container {
   instances: any = {};
@@ -13,7 +14,7 @@ export class Container {
     }
 
     options.forEach((option) => {
-      if (typeof option !== 'object' || Array.isArray(option)) {
+      if (!isObject(option) || Array.isArray(option)) {
         throw new Error('options item should be an instance option object');
       }
 
@@ -43,7 +44,7 @@ export class Container {
   }
 
   private static verifyParameterOption(optionParameter: ParameterOption) {
-    if (typeof optionParameter !== 'object' || Array.isArray(optionParameter)) {
+    if (!isObject(optionParameter) || Array.isArray(optionParameter)) {
       throw new Error('parameter should be a ParameterOption object');
     }
 
@@ -79,7 +80,7 @@ export class Container {
     }
 
     dependencies.forEach((dependency) => {
-      if (typeof dependency !== 'object' || Array.isArray(dependency)) {
+      if (!isObject(dependency) || Array.isArray(dependency)) {
         throw new Error('dependencies item should be a Dependency object');
       }
 
@@ -119,7 +120,7 @@ export class Container {
     }
 
     dependencies.forEach((dependency) => {
-      if (typeof dependency !== 'object' || Array.isArray(dependency)) {
+      if (!isObject(dependency) || Array.isArray(dependency)) {
         throw new Error('dependencies item should be a dependency object');
       }
 
